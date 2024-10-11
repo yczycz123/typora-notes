@@ -109,3 +109,88 @@ next[1] = 0;
 ```
 
 这是一定的。
+
+之后求解后面的next值要根据前面已经求出的值来求解，首先求当前的下标的next值与当前下标这一个字母没关系
+
+## 举例子
+
+![image-20241011111340636](assets/image-20241011111340636.png)
+
+我们要求解当前问号下面的next数组的值，我们已知前面的一个字母s的next数组值为7，也就意味着前缀下标0-6，也就是abataba，那我们看看前缀的再下面一个字符和当前问号的前面的这个字符是否相同，发现都是s，相同，那么当前问号的next数组值就是8。
+
+**如果不一样呢？**
+
+例如下面的例子
+
+![image-20241011112145907](assets/image-20241011112145907.png)
+
+在这里，s和t不一样，那我们就找s的next数组的值，发现是3，
+
+![image-20241011112342907](assets/image-20241011112342907-1728617134727-5.png)
+
+那我们不难推导，这个蓝色的框和红色的框里面的字符串一定一样，此时，我们就直接看蓝色框后面的这个字母和红色框后面的这个字符一不一样就行了，发现都是t，那么问号下的next数组的值就是4
+
+这是根据next数组跳了一次的例子，跳多次同理，如果最后跳到0了，那么说明没有相等的前后缀，答案就是0
+
+
+
+
+
+```java
+// KMP算法模版
+// 测试链接 : https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/
+public class Code01_KMP {
+
+	public static int strStr(String s1, String s2) {
+		// return s1.indexOf(s2);
+		return kmp(s1.toCharArray(), s2.toCharArray());
+	}
+
+	// KMP算法
+	public static int kmp(char[] s1, char[] s2) {
+		// s1中当前比对的位置是x
+		// s2中当前比对的位置是y
+		int n = s1.length, m = s2.length, x = 0, y = 0;
+		// O(m)
+		int[] next = nextArray(s2, m);
+		// O(n)
+		while (x < n && y < m) {
+			if (s1[x] == s2[y]) {
+				x++;
+				y++;
+			} else if (y > 0) {
+				y = next[y];
+			} else {  //y=0
+				x++
+			}
+		}
+		return y == m ? x - y : -1;
+	}
+
+	// 得到next数组
+	public static int[] nextArray(char[] s, int m) {
+		if (m == 1) {
+			return new int[] { -1 };
+		}
+		int[] next = new int[m];
+		next[0] = -1;
+		next[1] = 0;
+		// i表示当前要求next值的位置
+		// cn表示当前要和前一个字符比对的下标
+		int i = 2, cn = 0;
+		while (i < m) {
+			if (s[i - 1] == s[cn]) {
+				next[i++] = ++cn;
+			} else if (cn > 0) {
+				cn = next[cn];
+			} else {  //cn=0
+				next[i++] = 0;
+			}
+		}
+		return next;
+	}
+
+}
+
+```
+
