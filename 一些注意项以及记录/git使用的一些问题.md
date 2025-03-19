@@ -1,3 +1,38 @@
+
+
+# git项目的初始化
+
+
+
+[Github——git本地仓库建立与远程连接（最详细清晰版本！附简化步骤与常见错误）_将本地仓库与远程仓库关联-CSDN博客](https://blog.csdn.net/qq_29493173/article/details/113094143)
+
+
+
+尤其是6.2常见错误
+
+
+
+6.2 常见错误（不断更新中）
+①问题一：新建远程仓库的时候勾选Initialize this repository with a README，推送时可能会报failed to push some refs to https://github.com/xu-xiaoya/Elegent.git的错。
+
+解决方案：这是由于你新创建的那个仓库里面的README文件不在本地仓库目录中，这时可以同步内容。
+
+```
+$ git pull --rebase origin main之后再进行git push origin main就能成功了。
+```
+
+
+
+
+
+```
+git remote update origin --prune
+```
+
+vscode检测不到远程仓库时，上述指令可以刷新
+
+
+
 # origin的由来和意义
 
 
@@ -76,7 +111,7 @@ git push -u myrepo main
 
 
 
-
++
 
 # 关于git向github推送慢的问题
 
